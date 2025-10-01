@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Aashray | Login</title>
+</head>
+<body>
+   <div class="box">
+    <div class="container">
+        <div class="top">
+            <span>Have an account?</span>
+            <header>Login</header>
+        </div>
+        <div class="input-field">
+            <input type="text" class="input" placeholder="Username" id="username">
+            <i class='bx bx-user' ></i>
+        </div>
+        <div class="input-field">
+            <input type="password" class="input" placeholder="Password" id="password">
+            <i class='bx bx-lock-alt'></i>
+        </div>
+        <div class="input-field">
+            <input type="submit" class="submit" value="Login" id="loginButton">
+        </div>
+        <div class="two-col">
+            <div class="one">
+               <input type="checkbox" name="" id="check">
+               <label for="check"> Remember Me</label>
+            </div>
+            <div class="two">
+                <label><a href="signup.html" target="_blank">Sign Up</a></label>
+            </div>
+        </div>
+    </div>
+</div>  
+<script>
+  // Add an event listener to the Login button
+  document.getElementById("loginButton").addEventListener("click", function() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    // Retrieve saved users from localStorage or initialize an empty array
+    var savedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Check if the entered username and password match any saved user
+    var matchedUser = savedUsers.find(function(user) {
+      return user.username === username && user.password === password;
+    });
+
+    if (matchedUser) {
+      // Open location.html in a new window or tab
+      window.open("location.html", "_blank");
+    } else {
+      // Display an error message for incorrect credentials
+      alert("Invalid username or password. Please try again.");
+    }
+  });
+
+  // Add an event listener to the Remember Me checkbox
+  document.getElementById("check").addEventListener("change", function() {
+    var rememberMe = document.getElementById("check").checked;
+
+    if (rememberMe) {
+      // Save the username to localStorage
+      var username = document.getElementById("username").value;
+      localStorage.setItem("rememberedUsername", username);
+    } else {
+      // Clear the saved username from localStorage
+      localStorage.removeItem("rememberedUsername");
+    }
+  });
+
+  // Pre-fill the username field if remembered
+  var rememberedUsername = localStorage.getItem("rememberedUsername");
+  if (rememberedUsername) {
+    document.getElementById("username").value = rememberedUsername;
+    document.getElementById("check").checked = true;
+  }
+</script>
+</body>
+</html>

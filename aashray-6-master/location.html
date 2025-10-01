@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Aashray_form</title>
+  <link rel="stylesheet" href="css/form.css">
+  <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Ysabeau&display=swap" rel="stylesheet">
+  <style>
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      height: 28px;
+      width: 28px;
+      background-color: #d5d5d5;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      outline: none;
+    }
+
+    input[type="checkbox"]:after {
+      font-family: "Font Awesome 6 Free";
+      content: "\f00c";
+      font-weight: 900;
+      font-size: 28px;
+      color: white;
+      display: none;
+
+    }
+
+    input[type="checkbox"]:hover {
+      background-color: #a5a5a5;
+
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: #4CAF50;
+      display: block;
+    }
+
+    input[type="checkbox"]:checked:after {
+      display: block;
+      text-align: center;
+      justify-content: center;
+
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <h1>AASHRAY</h1> -->
+  <h1>Just One Click Can Change Someone's Life</h1>
+
+  <form method="post" name="google-sheet" autocomplete="off" id="myForm">
+    <div class="form-group">
+      <!-- <label for="name">Name:</label>  -->
+      <input type="text" id="name" name="name" placeholder="Name" required>
+
+    </div>
+
+    <div class="form-group">
+      <!-- <label for="contact">Contact Number:</label> -->
+      <input type="tel" id="contact" name="contact" placeholder="Contact Number" required>
+    </div>
+
+    <div class="form-group">
+      <!-- <label for="address">Address:</label> -->
+      <textarea id="address" name="address" rows="4" placeholder="Address" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <!-- <label for="location">Location:</label> -->
+      <div class="location-container">
+        <input type="text" id="location" name="location" placeholder="Location" required>
+        <button type="button" onclick="getCurrentLocation()" class="location-btn">Get Location</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <!-- <label for="remark">Remark:</label> -->
+      <textarea id="remark" name="remark" rows="4" placeholder="Remark"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="declaration-label" for="declaration">
+        <input type="checkbox" id="declaration" name="declaration" class="accept-it" required>
+        I declare that the given information is true and for wrong or untruthfull information i will be held guilty.
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="picture">Picture:</label>
+      <input type="file" accept="image/*" class="file" id="picture" name="picture" accept="image/*" capture="camera" onchange="previewImage(event)">
+    </div>
+
+    <img id="preview" src="#" alt="Preview Image">
+
+    <div class="form-group">
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+
+  <script>
+    // Img to base 64 conversion lets see how it goes
+    let url = "https://script.google.com/macros/s/AKfycbxAXq_2cpYiC-BYMwkwJGWdnkfaMTjrs01sPprb_XaMD1nBtj2DhvRsUY_L7r2B28X3nw/exec"; 
+    let file = document.querySelector(".file")
+    let img = document.querySelector("img")
+    file.addEventListener('change', ()=>{
+      let fr = new FileReader();
+      fr.addEventListener('loadend',()=>{
+        let res = fr.result;
+        img.src=res;
+        let spt = res.split("base64,")[1];
+        let obj = {
+                base64:spt,
+                type:file.files[0].type,
+                name:file.files[0].name
+            }
+
+            fetch(url,{
+                method:"POST",
+                body:JSON.stringify(obj)
+            })
+            .then(r=>r.text())
+            .then(data=>console.log(data))
+
+      })
+      fr.readAsDataURL(file.files[0])
+    })
+
+    function previewImage(event) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var output = document.getElementById('preview');
+        output.src = reader.result;
+        output.style.display = 'block';
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function getCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function showPosition(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      var locationInput = document.getElementById("location");
+      locationInput.value = "http://www.google.com/maps/place/"+latitude + ","+longitude;
+    }
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxAXq_2cpYiC-BYMwkwJGWdnkfaMTjrs01sPprb_XaMD1nBtj2DhvRsUY_L7r2B28X3nw/exec'
+    const form = document.forms['google-sheet']
+
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => alert("Thanks for Contacting us..! We Will Contact You Soon..."))
+        .catch(error => console.error('Error!', error.message))
+        document.getElementById("myForm").reset();
+    })
+
+
+  </script>
+</body>
+
+</html>

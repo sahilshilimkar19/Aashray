@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Aashray | Sign Up</title>
+    <style>
+        body {
+            background-color: rgb(34, 35, 35);
+        }
+    </style>
+</head>
+<body>
+   <div class="box">
+    <div class="container">
+        <div class="top">
+            <span>Create an account</span>
+            <header>Sign Up</header>
+        </div>
+        <div class="input-field">
+            <input type="text" class="input" placeholder="Username" id="signupUsername">
+            <i class='bx bx-user'></i>
+        </div>
+        <div class="input-field">
+            <input type="password" class="input" placeholder="Password" id="signupPassword">
+            <i class='bx bx-lock-alt'></i>
+        </div>
+        <div class="input-field">
+            <input type="text" class="input" placeholder="Name as per Aadhaar Card" id="signupName">
+            <i class='bx bx-user'></i>
+        </div>
+        <div class="input-field">
+            <input type="text" class="input" placeholder="Contact Number" id="signupContact">
+            <i class='bx bx-phone'></i>
+        </div>
+        <div class="input-field">
+            <input type="text" class="input" placeholder="Aadhaar Card Number" id="signupAadhaar">
+            <i class='bx bx-id-card'></i>
+        </div>
+        <div class="input-field">
+            <input type="text" class="input" placeholder="Email ID" id="signupAddress">
+            <i class='bx bx-home'></i>
+        </div>
+        <div class="input-field">
+            <input type="submit" class="submit" value="Register" id="registerButton">
+        </div>
+    </div>
+</div>  
+<script>
+  // Add an event listener to the Register button
+  document.getElementById("registerButton").addEventListener("click", function() {
+    var username = document.getElementById("signupUsername").value;
+    var password = document.getElementById("signupPassword").value;
+    var name = document.getElementById("signupName").value;
+    var contact = document.getElementById("signupContact").value;
+    var aadhaar = document.getElementById("signupAadhaar").value;
+    var address = document.getElementById("signupAddress").value;
+
+    // Check if the fields are empty
+    if (username === "" || password === "" || name === "" || contact === "" || aadhaar === "" || address === "") {
+      alert("Please fill in all the fields.");
+      return;
+    }
+
+    // Check if contact number has 10 digits
+    if (!/^\d{10}$/.test(contact)) {
+      alert("Please enter a valid 10-digit contact number.");
+      return;
+    }
+
+    // Check if Aadhaar card number has 12 digits
+    if (!/^\d{12}$/.test(aadhaar)) {
+      alert("Please enter a valid 12-digit Aadhaar card number.");
+      return;
+    }
+
+    // Check if name contains only letters
+    if (!/^[A-Za-z]+$/.test(name)) {
+      alert("Please enter a valid name (letters only).");
+      return;
+    }
+    
+
+    // Check if address contains letters, numbers, and commas
+    // if (!/^[a-zA-Z0-9, ]+$/.test(address)) {
+    //   alert("Please enter a valid address (letters, numbers, and commas only).");
+    //   return;
+    // }
+    if (!/^[\w.-]+@[A-Za-z]+\.[A-Za-z]+$/.test(address)) {
+     alert("Please enter a valid email address.");
+     return;
+    }
+
+    // Retrieve existing users from localStorage or initialize an empty array
+    var existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Check if the username already exists
+    var userExists = existingUsers.some(function(user) {
+      return user.username === username;
+    });
+
+    if (userExists) {
+      alert("Username already exists. Please choose a different username.");
+      return;
+    }
+
+    // Create a new user object
+    var newUser = {
+      username: username,
+      password: password,
+      name: name,
+      contact: contact,
+      aadhaar: aadhaar,
+      address: address
+    };
+
+    // Add the new user to the existing users array
+    existingUsers.push(newUser);
+
+    // Update the users in localStorage
+    localStorage.setItem("users", JSON.stringify(existingUsers));
+
+    // Reset the Sign Up form
+    document.getElementById("signupUsername").value = "";
+    document.getElementById("signupPassword").value = "";
+    document.getElementById("signupName").value = "";
+    document.getElementById("signupContact").value = "";
+    document.getElementById("signupAadhaar").value = "";
+    document.getElementById("signupAddress").value = "";
+
+    // Display a success message
+    alert("Registration successful! You can now log in with your new account.");
+
+    // Close the sign-up tab
+    window.close();
+  });
+</script>
+</body>
+</html>
